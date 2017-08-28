@@ -167,6 +167,10 @@ anymatch@^1.3.0:
     micromatch "^2.1.5"
     normalize-path "^2.0.0"
 
+aor-feathers-client@^0.5.0:
+  version "0.5.0"
+  resolved "https://registry.yarnpkg.com/aor-feathers-client/-/aor-feathers-client-0.5.0.tgz#3c8198be0f092e8ff47e3975e931c96e1d80776a"
+
 append-transform@^0.4.0:
   version "0.4.0"
   resolved "https://registry.yarnpkg.com/append-transform/-/append-transform-0.4.0.tgz#d76ebf8ca94d276e247a36bad44a4b74ab611991"

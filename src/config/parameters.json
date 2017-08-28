@@ -1,0 +1,5 @@
+{
+	"API_ENDPOINT" : "http://api.persona.dev/api",
+	"API_DOC"      : "http://api.persona.dev/api/doc",
+	"API_CLIENT"   : "http://localhost:8080"
+}
