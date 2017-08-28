@@ -7,11 +7,9 @@ import {
     UPDATE,
     DELETE,
     fetchUtils,
-    simpleRestClient
 } from 'admin-on-rest';
-
+import Axios from 'axios';
 import config from '../config/parameters.json';
-import Request from 'request';
 
 const API_URL = config.API_ENDPOINT;
 
@@ -26,7 +24,7 @@ const convertRESTRequestToHTTP = (type, resource, params) => {
     const { queryParameters } = fetchUtils;
     const options = {};
     switch (type) {
-    case GET_LIST: 
+    case GET_LIST: {
         const { page, perPage } = params.pagination;
         const { field, order } = params.sort;
         const query = {
@@ -35,9 +33,9 @@ const convertRESTRequestToHTTP = (type, resource, params) => {
             filter: JSON.stringify(params.filter),
             access_token: localStorage.getItem('access_token')
         };
-        options.method = 'GET';
         url = `${API_URL}/${resource}.json?${queryParameters(query)}`;
         break;
+    }
     case GET_ONE:
         url = `${API_URL}/${resource}.json/${params.id}`;
         break;
@@ -87,17 +85,18 @@ const convertRESTRequestToHTTP = (type, resource, params) => {
  * @returns {Object} REST response
  */
 const convertHTTPResponseToREST = (response, type, resource, params) => {
-    const { headers, json } = response;
+    const { data } = response;
     switch (type) {
     case GET_LIST:
         return {
-            data: json.map(x => x),
+            data: data.map(x => x),
+            total: 2
             // total: parseInt(headers.get('content-range').split('/').pop(), 10),
         };
     case CREATE:
-        return { data: { ...params.data, id: json.id } };
+        return { data: { ...params.data, id: data.id } };
     default:
-        return { data: json };
+        return { data: data };
     }
 };
 
@@ -109,11 +108,10 @@ const convertHTTPResponseToREST = (response, type, resource, params) => {
  */
 export default (type, resource, params) => {
     const { url, options } = convertRESTRequestToHTTP(type, resource, params);
-
-    Request(url, options, function(error, response, body) {
-        if (!error) {
-            response.json = JSON.parse(body);
-            return convertHTTPResponseToREST(response, type, resource, params);
-        }
-    });
+    return Axios.get(url, options)
+            .then(response => convertHTTPResponseToREST(response, type, resource, params))
+            .catch(function (error) {
+                console.log(error);
+            });
+        
 };

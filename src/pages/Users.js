@@ -3,14 +3,11 @@ import { List, Datagrid, EmailField, TextField } from 'admin-on-rest';
 
 export const UserList = (props) => (
 	<List title="All Users" {...props}>
-{
-	console.log(props)
-}
 		<Datagrid>
-			<TextField source="id" />
-			<TextField source="name" />
-			<TextField source="username" />
+			<TextField source="fullName" />
 			<EmailField source="email" />
+			<TextField source="profileImage" />
+			<TextField source="roles" />
 		</Datagrid>
 	</List>
 )
